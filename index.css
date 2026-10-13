@@ -1,0 +1,100 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body{
+    background-color: #8758ff;
+}
+.container {
+font-family: "Nunito", sans-serif;
+  display: flex;
+  justify-content: center;
+  padding: 80px 16px;
+}
+.wrapper{
+  width: 100%;
+  max-width: 442px;
+  background: #1a1a40;
+  padding: 32px;
+  border-radius: 4px;
+}
+h1{
+    color: white;
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+form{
+    display: flex;
+    flex-wrap: wrap; 
+    margin-bottom: 32px;
+}
+input {
+  flex: 1;
+  color: white;
+  padding: 10px 20px;
+  background: none;
+  border: 1px solid #8758ff ;
+  outline: none;
+}
+input::placeholder{
+    color: gray;
+}
+
+button[type="submit"] {
+  background: #8758ff;
+  color: #fff;
+  border: 0;
+  padding: 0 12px;
+  cursor: pointer;
+}
+
+.error-message{
+  width: 100%;
+  color: #ff6b6b;
+  margin-bottom: 6px;
+}
+.error-message:empty {
+  display: none;     /* ẩn khi chưa có lỗi */
+}
+
+.task {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  background: #8758ff;
+  color: #fff;
+  padding: 12px 16px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+.task p {
+  flex: 1;
+  word-break: break-word;
+}
+
+.icons {
+  display: flex;
+  gap: 10px;
+}
+.icons button {
+  background: none;
+  border: 0;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+.icons button:hover {
+  transform: scale(1.2);
+}
+.edit-input {
+  flex: 1;
+  padding: 10px 20px;
+  background: #1a1a40;      
+  color: #fff;             
+  border: 1px solid #fff;
+  border-radius: 4px;
+}
