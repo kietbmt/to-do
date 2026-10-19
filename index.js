@@ -4,62 +4,68 @@ const list = document.getElementById("list");
 const errorMessage = document.querySelector(".error-message");
 
 let tasks = [];
-let editingId = null;
-
-const deleteTask = (id) => {
-  tasks = tasks.filter((task) => task.id !== id);
-  render();
-};
-
-const saveEdit = (id, newText) => {
-  newText = newText.trim();
-
-  if (newText !== "") {
-    const task = tasks.find((t) => t.id === id);
-    task.text = newText;
-  }
-
-  editingId = null;
-  render();
-};
-
 const render = () => {
   list.innerHTML = "";
 
   tasks.forEach((task) => {
+
     const row = document.createElement("div");
     row.className = "task";
 
     let content;
-    if (task.id === editingId) {
+
+    if (task.isEditing) {
       content = document.createElement("input");
-      content.value = task.text;
       content.className = "edit-input";
-      content.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") saveEdit(task.id, content.value);
+      content.value = task.draft;
+
+      content.addEventListener("input", () => {
+        task.draft = content.value;
       });
     } else {
       content = document.createElement("p");
       content.textContent = task.text;
+
+      if (task.completed) {
+        content.classList.add("completed");
+      }
+
+    
+      content.addEventListener("click", () => {
+        task.completed = !task.completed;
+        render();
+      });
     }
 
+
     const editBtn = document.createElement("button");
-    editBtn.innerHTML = task.id === editingId
-      ? '<i class="fa-solid fa-check"></i>'
-      : '<i class="fa-solid fa-pen-to-square"></i>';
+    if (task.isEditing) {
+      editBtn.innerHTML = '<i class="fa-solid fa-check"></i>';
+    } else {
+      editBtn.innerHTML = '<i class="fa-solid fa-pen-to-square"></i>';
+    }
+
     editBtn.addEventListener("click", () => {
-      if (task.id === editingId) {
-        saveEdit(task.id, content.value);
+      if (task.isEditing) {
+
+        if (task.draft.trim() !== "") {
+          task.text = task.draft.trim();
+        }
+        task.isEditing = false;
       } else {
-        editingId = task.id;
-        render();
+
+        task.isEditing = true;
+        task.draft = task.text;
       }
+      render();
     });
 
     const deleteBtn = document.createElement("button");
     deleteBtn.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
+
     deleteBtn.addEventListener("click", () => {
-      deleteTask(task.id);
+      tasks = tasks.filter((t) => t.id !== task.id);
+      render();
     });
 
     const icons = document.createElement("div");
@@ -70,22 +76,24 @@ const render = () => {
     row.appendChild(content);
     row.appendChild(icons);
     list.appendChild(row);
-
-    if (task.id === editingId) content.focus();
   });
 };
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
   const text = input.value.trim();
-
   if (text === "") {
     errorMessage.textContent = "Vui lòng nhập công việc!";
     return;
   }
-
   errorMessage.textContent = "";
-  tasks.push({ id: Date.now(), text });
+  tasks.push({
+    id: Date.now(),
+    text: text,
+    completed: false,
+    isEditing: false,
+    draft: "",
+  });
   input.value = "";
   render();
 });
